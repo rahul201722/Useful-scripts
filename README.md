@@ -23,9 +23,61 @@ A comprehensive bash script to update all LazyVim dependencies including plugins
 # Make executable (if not already)
 chmod +x update_lazyvim.sh
 
-# Run the script
+# Run the script manually
 ./update_lazyvim.sh
+
+# Or use the auto-updater (see Auto-Update Setup below)
 ```
+
+#### Auto-Update Setup:
+The repository includes an auto-updater that can be configured to run every 15 days. To set it up:
+
+1. **Install the auto-updater script:**
+   ```bash
+   # Copy the auto-updater to your home directory
+   cp .lazyvim_auto_updater.sh ~/
+   chmod +x ~/.lazyvim_auto_updater.sh
+   ```
+
+2. **Add to your shell configuration:**
+   
+   For **Zsh** (add to `~/.zshrc`):
+   ```bash
+   # LazyVim Auto-Updater - runs every 15 days
+   if [[ -f "$HOME/.lazyvim_auto_updater.sh" ]]; then
+       ("$HOME/.lazyvim_auto_updater.sh" auto &)
+   fi
+   
+   # Manual update function
+   lazyvim-update() {
+       if [[ -f "$HOME/.lazyvim_auto_updater.sh" ]]; then
+           "$HOME/.lazyvim_auto_updater.sh" force
+       fi
+   }
+   alias lvu="lazyvim-update"
+   ```
+   
+   For **Fish** (add to `~/.config/fish/config.fish`):
+   ```fish
+   # LazyVim Auto-Updater - runs every 15 days
+   if test -f "$HOME/.lazyvim_auto_updater.sh"
+       bash "$HOME/.lazyvim_auto_updater.sh" auto &
+   end
+   
+   # Manual update function
+   function lazyvim-update
+       if test -f "$HOME/.lazyvim_auto_updater.sh"
+           bash "$HOME/.lazyvim_auto_updater.sh" force
+       end
+   end
+   alias lvu="lazyvim-update"
+   ```
+
+3. **Manual commands:**
+   ```bash
+   lazyvim-update  # Force update now
+   lvu            # Alias for lazyvim-update
+   ```
 
 #### Requirements:
 - Neovim with LazyVim configuration
